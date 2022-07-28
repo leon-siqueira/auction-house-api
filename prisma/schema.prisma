@@ -24,6 +24,8 @@ model User {
   collection  Art[]
   transaction Transaction[]
   bids        Bid[]
+
+  @@map("users")
 }
 
 model Art {
@@ -39,6 +41,8 @@ model Art {
 
   owner   User? @relation(fields: [ownerId], references: [id])
   ownerId Int?
+
+  @@map("arts")
 }
 
 model Aucton {
@@ -55,6 +59,8 @@ model Aucton {
   winnerId Int?
 
   bids Bid[]
+
+  @@map("auctions")
 }
 
 model Transaction {
@@ -66,6 +72,8 @@ model Transaction {
 
   user   User @relation(fields: [userId], references: [id])
   userId Int
+
+  @@map("transactions")
 }
 
 model Bid {
@@ -80,6 +88,8 @@ model Bid {
 
   auction   Aucton @relation(fields: [auctionId], references: [id])
   auctionId Int
+
+  @@map("bids")
 }
 
 enum TransactionTypes {
