@@ -15,11 +15,15 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  username String
-  email    String
+  username String @unique
+  email    String @unique
   password String
 
   bio String?
+
+  collection  Art[]
+  transaction Transaction[]
+  bids        Bid[]
 }
 
 model Art {
@@ -29,6 +33,61 @@ model Art {
 
   title  String
   author String
+  images String[]
 
   description String?
+
+  owner   User? @relation(fields: [ownerId], references: [id])
+  ownerId Int?
+}
+
+model Aucton {
+  id        Int      @id @unique @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  startDate DateTime
+  endDate   DateTime
+
+  startingBid  Int
+  bidIncrement Int
+
+  winnerId Int?
+
+  bids Bid[]
+}
+
+model Transaction {
+  id        Int      @id @unique @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  type TransactionTypes
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model Bid {
+  id        Int      @id @unique @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status BidStatus
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  auction   Aucton @relation(fields: [auctionId], references: [id])
+  auctionId Int
+}
+
+enum TransactionTypes {
+  DEPOSIT
+  WITHDRAWAL
+}
+
+enum BidStatus {
+  WINNING
+  COVERED
 }
